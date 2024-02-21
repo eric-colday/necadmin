@@ -5,7 +5,11 @@ import { notFound } from 'next/navigation';
 import ProduitInfos from '@/app/components/dashboard/produits/ProduitInfos';
 
 async function getData(id) {
-  const res = await fetch("http://localhost:3000/api/products/" + id, {
+  // const res = await fetch("http://localhost:3000/api/products/" + id, {
+  //   cache: "no-store",
+  // });
+
+  const res = await fetch("https://necadmin.vercel.app/api/products/" + id, {
     cache: "no-store",
   });
 
@@ -37,7 +41,7 @@ const Produit = async ({params}) => {
             </div>
           </Link>
         </div>
-        <ProduitInfos product={data}/>  
+        <ProduitInfos product={data}/>   
       </div>
     </div> 
   )
