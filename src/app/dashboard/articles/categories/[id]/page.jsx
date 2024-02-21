@@ -4,7 +4,11 @@ import { notFound } from "next/navigation";
 import CatInfos from '@/app/components/dashboard/articles/CatInfos';
 
 async function getData(id) {
-  const res = await fetch("http://localhost:3000/api/categoryposts/" + id, {
+  // const res = await fetch("http://localhost:3000/api/categoryposts/" + id, {
+  //   cache: "no-store",
+  // });
+
+  const res = await fetch("https://necadmin.vercel.app/api/categoryposts/" + id, {
     cache: "no-store",
   });
 

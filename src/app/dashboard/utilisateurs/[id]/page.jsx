@@ -5,9 +5,15 @@ import UserInfos from "@/app/components/dashboard/utilisateurs/UserInfos";
 
 
 async function getData(id) {
-  const res = await fetch("http://localhost:3000/api/users/" + id, {
+  // const res = await fetch("http://localhost:3000/api/users/" + id, {
+  //   cache: "no-store",
+  // });
+
+  const res = await fetch("https://necadmin.vercel.app/api/users/" + id, {
     cache: "no-store",
   });
+
+  
 
   if (!res.ok) {
     return notFound();

@@ -4,7 +4,11 @@ import React from "react";
 import { notFound } from "next/navigation";
 
 async function getData(id) {
-  const res = await fetch("http://localhost:3000/api/categoryproducts/" + id, {
+  // const res = await fetch("http://localhost:3000/api/categoryproducts/" + id, {
+  //   cache: "no-store",
+  // });
+
+  const res = await fetch("https://necadmin.vercel.app/api/categoryproducts/" + id, {
     cache: "no-store",
   });
 
