@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useContext, useEffect, useState } from "react";
-import { ThemeContext } from "../../../../context/ThemeContext";
+import { ThemeContext } from "@/context/ThemeContext";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import Link from "next/link";

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import HomeIcon from "@mui/icons-material/Home";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import StorefrontIcon from "@mui/icons-material/Storefront";
@@ -10,11 +10,32 @@ import ArticleIcon from "@mui/icons-material/Article";
 import CloseIcon from "@mui/icons-material/Close";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import LogoutIcon from "@mui/icons-material/Logout";
-import ThemeToggle from "../../themeToggle/ThemeToggle";
+import ThemeToggle from "@/app/components/themeToggle/ThemeToggle";
 import Image from "next/image";
-import { signOutAction } from "@/app/lib/actions";
+import { signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const Sidebar = () => {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+  const [user, setUser] = useState({});
+  const userId = session?.user._id;
+
+  if (status === "unauthenticated") {
+    router.push("/connexion");
+  }
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      if (userId) {
+        const response = await fetch(`/api/users/${userId}`);
+        const data = await response.json();
+        setUser(data);
+      }
+    };
+    fetchUser();
+  }, [userId]);
+
   const [showLinks, setShowLinks] = useState(false);
 
   const handleShowLinks = () => {
@@ -57,16 +78,27 @@ const Sidebar = () => {
                   text-white text-2xl cursor-pointer
                   "
                 />
-                <div className="flex flex-col p-3 gap-6">
-                  <Link href="/dashboard" className="cursor-pointer">
+                <div className="flex flex-col p-6 gap-6">
+                  <Link
+                    href={`/dashboard/profile/${user.username}`}
+                    className="cursor-pointer"
+                  >
                     <div className="flex items-center gap-5">
                       <img
-                        src="/sidebar/veste-esprit-campus3.webp"
+                        src={user.image}
                         className="w-16 h-16 object-cover rounded-full"
                       />
                       <div className="flex flex-col gap-1">
-                        <span className="text-sm text-white">Eric Colday</span>
-                        <span className="text-white text-sm">Admin</span>
+                        <span className="text-sm text-white capitalize">
+                          {user.fullname ? user.fullname : user.username}
+                        </span>
+                        <span className="text-white text-sm">
+                          {user.isAdmin ? (
+                            <span className="text-blue-500">
+                              Administrateur
+                            </span>
+                          ) : null}
+                        </span>
                       </div>
                     </div>
                   </Link>
@@ -122,15 +154,9 @@ const Sidebar = () => {
                         Articles
                       </li>
                     </Link>
-                    <form
-                      action={async () => {
-                        await signOutAction();
-                      }}
-                    >
-                      <button type="submit">
-                        <LogoutIcon className="text-3xl text-white cursor-pointer mb-2" />
-                      </button>
-                    </form>
+                    <button className="flex items-center">
+                      <LogoutIcon className="text-3xl text-white cursor-pointer mb-2" onClick={signOut}/>
+                    </button>
                     <ThemeToggle />
                   </ul>
                   <div className="text-sm mt-10 text-center">
@@ -190,21 +216,21 @@ const Sidebar = () => {
               <ArticleIcon className="text-xl mr-2" />
             </Link>
             <ThemeToggle />
-            <Link href="/dashboard/utilisateurs" className="cursor-pointer ">
+            <Link
+              href={`/dashboard/profile/${user.username}`}
+              className="cursor-pointer "
+            >
               <img
-                src="/sidebar/veste-esprit-campus3.webp"
+                src={user.image}
                 className="w-12 h-12 object-cover rounded-full"
               />
             </Link>
-            <form
-              action={async () => {
-                await signOutAction();
-              }}
-            >
-              <button type="submit">
-                <LogoutIcon className="text-3xl text-white cursor-pointer mb-2" />
-              </button>
-            </form>
+            <button type="submit">
+              <LogoutIcon
+                className="text-3xl text-white cursor-pointer mb-2"
+                onClick={signOut}
+              />
+            </button>
           </div>
         </div>
       </div>
@@ -220,15 +246,24 @@ const Sidebar = () => {
             </span>
           </Link>
           <div className="flex flex-col p-3 gap-6">
-            <Link href="/dashboard/utilisateurs" className="cursor-pointer">
+            <Link
+              href={`/dashboard/profile/${user.username}`}
+              className="cursor-pointer"
+            >
               <div className="flex items-center gap-5">
                 <img
-                  src=""
+                  src={user.image}
                   className="w-16 h-16 object-cover rounded-full"
                 />
                 <div className="flex flex-col gap-1">
-                  <span className="text-sm">Eric Colday</span>
-                  <span className="text-white text-sm">Admin</span>
+                  <span className="text-sm capitalize ">
+                    {user.fullname ? user.fullname : user.username}
+                  </span>
+                  <span className="text-white text-sm">
+                    {user.isAdmin ? (
+                      <span className="text-blue-500">Administrateur</span>
+                    ) : null}
+                  </span>
                 </div>
               </div>
             </Link>
@@ -241,6 +276,8 @@ const Sidebar = () => {
               </Link>
               <Link
                 href="https://necstore.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="flex items-center"
               >
                 <StorefrontIcon className="text-xl mr-2" />
@@ -267,15 +304,12 @@ const Sidebar = () => {
                 <ArticleIcon className="text-xl mr-2" />
                 <li className=" cursor-pointer flex items-center ">Articles</li>
               </Link>
-              <form
-                action={async () => {
-                  await signOutAction();
-                }}
-              >
-                <button type="submit">
-                  <LogoutIcon className="text-3xl text-white cursor-pointer mb-2" />
-                </button>
-              </form>
+              <button type="submit" className="flex items-center">
+                <LogoutIcon
+                  className="text-3xl text-white cursor-pointer"
+                  onClick={signOut}
+                />
+              </button>
               <ThemeToggle />
             </ul>
           </div>

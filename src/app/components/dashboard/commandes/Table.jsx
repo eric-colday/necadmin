@@ -1,19 +1,35 @@
 "use client";
 
-import React, { useContext, useState } from "react";
-import { ThemeContext } from "../../../../context/ThemeContext";
+import React, { useContext, useEffect, useState } from "react";
+import { ThemeContext } from "@/context/ThemeContext";
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import Link from "next/link";
 import { format } from "timeago.js";
 
-const Table = ({ data, page }) => {
+const Table = ({ data }) => {
   const { theme } = useContext(ThemeContext);
-  const [orders, setOrders] = useState(data);
+  const [list, setList] = useState();
 
-  const handleDelete = (slug) => {
-    const newData = orders.filter((item) => item.slug !== slug);
-    setOrders(newData);
+  const [modal, setModal] = useState(null);
+
+  const openModal = (id) => {
+    setModal(id);
+  };
+
+  useEffect(() => {
+    setList(data);
+  }, [data]);
+
+  const handleDelete = async (_id) => {
+    try {
+      await fetch("/api/orders/" + _id, {
+        method: "DELETE",
+      });
+      setList(list.filter((order) => order._id !== _id));
+      window.location.reload();
+      Router.push("/dashboard/commandes");
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -27,8 +43,9 @@ const Table = ({ data, page }) => {
     >
       <thead>
         <tr className="h-20">
-          <td className="border-b pl-4">ID</td>
-          <td className="border-b pl-4 max-[910px]:hidden">Montant</td>
+          <td className="border-b pl-4 max-[910px]:hidden">ID</td>
+          <td className="border-b pl-4">Email</td>
+          <td className="border-b pl-4 ">Montant</td>
           <td className="border-b pl-4 max-[910px]:hidden">
             Nombre de produits
           </td>
@@ -38,14 +55,13 @@ const Table = ({ data, page }) => {
         </tr>
       </thead>
       <tbody>
-        {data.slice((page - 1) * 4, (page - 1) * 4 + 4).map((order) => (
+        {data.map((order) => (
           <tr className="h-14" key={order.id}>
-            <td className="border-b pl-4 py-4 flex items-center gap-2">
-              {order.id}
+            <td className="border-b pl-4 py-4 flex items-center gap-2 max-[910px]:hidden">
+              {order._id.length > 5 ? order._id.slice(0, 5) + "..." : order._id}
             </td>
-            <td className="border-b pl-4 max-[910px]:hidden">
-              {order.amount}€
-            </td>
+            <td className="border-b pl-4">{order.userEmail}</td>
+            <td className="border-b pl-4 ">{order.amount}€</td>
             <td className="group/item border-b pl-4 cursor-pointer max-[910px]:hidden">
               {order.products.reduce((acc, item) => acc + item.quantity, 0)}{" "}
               produits
@@ -65,30 +81,34 @@ const Table = ({ data, page }) => {
             <td
               className="border-b pl-4 max-[421px]:hidden"
               style={
-                order.status === "terminé"
+                order.status === "Payé!"
                   ? { color: "#21c55d" }
                   : { color: "#f77171" }
               }
             >
-              {order.status === "terminé" ? "Payée" : "En attente"}
+              {order.status}
             </td>
             <td className="border-b pl-4 max-[1115px]:hidden">
               {format(order.createdAt, "fr_FR")}
             </td>
             <td className="border-b pl-4">
-              <select
-                name="status"
-                id="status"
-                className="bg-transparent border-none outline-none pr-4"
-                defaultValue={order.status}
+              <form
+                action=""
+                className="flex gap-2"
               >
-                <option value="en attente">En attente</option>
-                <option value="terminé">Terminé</option>
-              </select>
-              <DeleteOutlineIcon
-                className="text-red-400 cursor-pointer"
-                onClick={() => handleDelete(order.slug)}
-              />
+                <select
+                  name="action"
+                  id="action"
+                  // onChange={handleChange}
+                  className="w-24 border outline-none border-gray-300 text-sky-950 rounded-xl p-2"
+                >
+                  <option value="true">En cours</option>
+                  <option value="false">Livré</option>
+                </select>
+                <button>
+                  <EditIcon name="edit" className="cursor-pointer" />
+                </button>
+              </form>
             </td>
           </tr>
         ))}

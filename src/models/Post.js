@@ -4,20 +4,13 @@ const { Schema } = mongoose;
 
 const postSchema = new Schema(
   {
-    img: { type: String, default: "/noavatar.png" },
+    img: { type: String, default: "https://res.cloudinary.com/dzer4ijr1/image/upload/v1703108635/users/noavatar_xckjxl.png" },
     title: {
-      type: String,
-      required: true,
-      unique: true,
-      minLength: 3,
-      maxLength: 20,
-    },
-    description: {
       type: String,
       required: true,
     },
     content: {
-      type: Number,
+      type: String,
       required: true,
     },
     slug: {
@@ -27,7 +20,11 @@ const postSchema = new Schema(
       type: String,
     },
     cat: {
+      type: String, 
+    },
+    fullname: {
       type: String,
+      required: true,
     },
   },
   { timestamps: true }

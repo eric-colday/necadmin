@@ -1,12 +1,47 @@
 "use client";
 
-import { ThemeContext } from "../../../../context/ThemeContext";
-import React, { useContext, useState } from "react";
-import PublishIcon from "@mui/icons-material/Publish";
+import { ThemeContext } from "@/context/ThemeContext";
+import React, { useContext, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 const CatInfos = ({ data }) => {
   const { theme } = useContext(ThemeContext);
-  const [file, setFile] = useState("");
+  const [update, setUpdate] = useState({});
+  const categoryId = data._id;
+  console.log(categoryId);
+
+  useEffect(
+    () => () => {
+      setUpdate({});
+    },
+    [data]
+  );
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const updateUser = {
+      ...update,
+    };
+
+    try {
+      const res = await fetch("/api/categoryposts/" + categoryId, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updateUser),
+      });
+      const responseData = await res.json();
+      if (responseData) {
+        window.location.reload();
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleChange = (e) => {
+    setUpdate((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+  };
 
   return (
     <form
@@ -16,6 +51,7 @@ const CatInfos = ({ data }) => {
           ? { backgroundColor: "#0f172a", color: "white" }
           : { backgroundColor: "#E6F4FE", color: "black" }
       }
+      onSubmit={handleSubmit}
     >
       <div>
         <label htmlFor="" className="text-sm">
@@ -26,13 +62,14 @@ const CatInfos = ({ data }) => {
           id="title"
           name="title"
           placeholder={data.title}
-          defaultValue={data.title}
+          defaultValue={data.title}  
+          onChange={handleChange}
           required
           className="w-full border outline-none border-gray-300 text-sky-950 rounded-xl p-1 mt-2"
         />
       </div>
       <div className="mt-2">
-        <label htmlFor="" className="text-sm">
+        <label htmlFor="" className="text-sm"> 
           Slug
         </label>
         <input
@@ -41,28 +78,9 @@ const CatInfos = ({ data }) => {
           name="slug"
           placeholder={data.slug}
           defaultValue={data.slug}
+          onChange={handleChange} 
           required
           className="w-full border outline-none border-gray-300 text-sky-950 rounded-xl p-1 mt-2"
-        />
-      </div>
-      <div className="flex items-center gap-5 max-[504px]:flex-col mt-4">
-        <img
-          src={file ? URL.createObjectURL(file) : data.image}
-          alt={data.title}
-          className="w-28 h-28 border rounded-xl object-cover"
-        />
-        <label htmlFor="file">
-          <PublishIcon />
-        </label>
-        <input
-          type="file"
-          id="file"
-          name="file"
-          accept=".png,.jpeg,.jpg,.webp"
-          style={{ display: "none" }}
-          required
-          onChange={(e) => setFile(e.target.file[0])}
-          className="max-[504px]: max-[504px]:text-xs max-[504px]:w-full"
         />
       </div>
       <div className="max-[504px]:text-center">

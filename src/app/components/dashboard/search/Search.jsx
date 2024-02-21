@@ -3,7 +3,6 @@
 import React from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce"; 
-import SearchIcon from "@mui/icons-material/Search";
 
 
 const Search = ({ placeholder }) => {
@@ -37,7 +36,7 @@ const Search = ({ placeholder }) => {
         type="submit"
         className="w-28 bg-blue-950 text-white  cursor-pointer p-2 rounded-r-lg max-[900px]:hidden max-[818px]:block max-[690px]:hidden  max-[552px]:block  max-[386px]:hidden"
       >
-        Rechercher
+        Recharger
       </button>
       <div className="w-10 bg-blue-950 cursor-pointer p-2 rounded-r-lg hidden max-[900px]:flex max-[900px]:items-center max-[818px]:hidden max-[690px]:flex max-[690px]:items-center  max-[552px]:hidden  max-[386px]:flex max-[386px]:items-center">
         <img

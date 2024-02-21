@@ -1,7 +1,7 @@
 "use server";
 
-import Product from "@/models/Product";
-import User from "../../models/User";
+
+import User from "@/models/User";
 import connect from "./utils";
 
 export const fetchUsers = async (q, page) => {

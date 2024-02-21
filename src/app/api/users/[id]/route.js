@@ -1,5 +1,6 @@
-import connect from "../../../lib/utils";
-import User from "../../../../models/User";
+
+import connect from "@/app/lib/utils";
+import User from "@/models/User";
 import { NextResponse } from "next/server";
 
 export const GET = async (request, { params }) => {
@@ -21,7 +22,7 @@ export const PUT = async (request, { params }) => {
     await request.json();
   try {
     await connect();
-    // FIND USER BY ID AND UPDATE 
+    // FIND USER BY ID AND UPDATE  
      await User.findByIdAndUpdate(
       id,
       {

@@ -1,6 +1,7 @@
 "use client";
 
-import { ThemeContext } from "../../../../context/ThemeContext";
+import { ThemeContext } from "@/context/ThemeContext";
+import { usersData } from "@/data";
 import React, { useContext } from "react";
 import {
   AreaChart,
@@ -11,7 +12,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { usersData } from "../../../../data";
+
 
 
 const Chart = () => {

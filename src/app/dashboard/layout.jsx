@@ -1,6 +1,6 @@
 import React from "react";
-import Sidebar from "../components/dashboard/sidebar/Sidebar";
-import Footer from "../components/dashboard/footer/Footer";
+import Sidebar from "@/app/components/dashboard/sidebar/Sidebar";
+import Footer from "@/app/components/dashboard/footer/Footer";
 
 const Layout = ({ children }) => {
   return (

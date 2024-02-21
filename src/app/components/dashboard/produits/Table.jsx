@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useContext, useEffect, useState } from "react";
-import { ThemeContext } from "../../../../context/ThemeContext";
+import { ThemeContext } from "@/context/ThemeContext";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import Link from "next/link";
@@ -16,13 +16,13 @@ const Table = ({ data }) => {
     setModal(id);
   };
 
-  useEffect(() => {
+  useEffect(() => { 
     setList(data);
   }, [data]);
 
   const handleDelete = async (_id) => {
     try {
-      await fetch("/api/products/" + _id, {
+      await fetch("/api/categoryproducts/" + _id, {
         method: "DELETE",
       });
       setList(list.filter((product) => product._id !== _id));
@@ -32,7 +32,7 @@ const Table = ({ data }) => {
       console.log(err);
     }
   };
- 
+  
 
   return (
     <table
@@ -44,7 +44,7 @@ const Table = ({ data }) => {
       }
     >
       <thead>
-        <tr className="h-20">
+        <tr className="h-20"> 
           <td className="border-b pl-4 max-[910px]:hidden">ID</td>
           <td className="border-b pl-4">Produits</td>
           <td className="border-b pl-4 max-[1115px]:hidden">Prix</td>
@@ -64,8 +64,8 @@ const Table = ({ data }) => {
                 alt=""
                 className="w-10 h-10 object-cover rounded-full max-[357px]:hidden"
               />
-              {item.title.length > 25
-                ? item.title.slice(0, 25) + "..."
+              {item.title.length > 15
+                ? item.title.slice(0, 15) + "..."
                 : item.title}
             </td>
             <td className="border-b pl-4 max-[1115px]:hidden">

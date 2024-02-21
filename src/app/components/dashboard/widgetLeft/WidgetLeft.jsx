@@ -1,7 +1,7 @@
 "use client";
 
-import { ThemeContext } from "../../../../context/ThemeContext";
-import { Users } from "../../../../data";
+import { ThemeContext } from "@/context/ThemeContext";
+import { Users } from "@/data";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import Link from "next/link";
 import { notFound } from "next/navigation";

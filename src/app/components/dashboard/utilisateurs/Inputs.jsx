@@ -16,7 +16,7 @@ const Inputs = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = new FormData();
+    const data = new FormData(); 
     data.append("file", file);
     data.append("upload_preset", "upload");
     try {

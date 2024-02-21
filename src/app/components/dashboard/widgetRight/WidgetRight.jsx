@@ -1,11 +1,10 @@
 "use client";
 
-import { ThemeContext } from "../../../../context/ThemeContext";
+import { ThemeContext } from "@/context/ThemeContext";
 import Link from "next/link";
 import React, { useContext } from "react";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import { format } from "timeago.js";
-import { Orders } from "../../../../data";
+import { Orders } from "@/data";
 import { notFound } from "next/navigation";
 
 const getData = () => {

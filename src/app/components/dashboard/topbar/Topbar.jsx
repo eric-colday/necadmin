@@ -1,9 +1,9 @@
 "use client";
 
-import { ThemeContext } from "../../../../context/ThemeContext";
+import { ThemeContext } from "@/context/ThemeContext";
 import Link from "next/link";
 import React, { useContext } from "react";
-import ThemeToggle from "../../themeToggle/ThemeToggle";
+import ThemeToggle from "@/app/components/themeToggle/ThemeToggle";
 import PersonIcon from "@mui/icons-material/Person";
 
 const Topbar = () => {

@@ -1,12 +1,20 @@
 "use client";
 
-import { ThemeContext } from "../context/ThemeContext";
+import { ThemeContext } from "@/context/ThemeContext";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useContext } from "react";
 
 export default function Home() {
   const { theme } = useContext(ThemeContext);
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
+  if (status === "authenticated") {
+    router.push("/dashboard");
+  }
 
   return (
     <div
@@ -16,7 +24,7 @@ export default function Home() {
           : { backgroundColor: "#E6F4FE", color: "black" }
       }
     >
-      <div className="flex justify-center items-center gap-20 py-52 px-20 max-[768px]:flex-col-reverse">
+      <div className="h-screen flex justify-center items-center gap-20 py-52 px-20 max-[768px]:flex-col-reverse">
         <div className="flex flex-col gap-4">
           <h2 className="text-3xl font-bold">Bienvenue sur NecAdmin</h2>
           <p>

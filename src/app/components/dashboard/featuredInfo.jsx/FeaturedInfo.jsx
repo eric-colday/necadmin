@@ -3,7 +3,7 @@
 import React, { useContext } from "react";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
-import { ThemeContext } from "../../../../context/ThemeContext";
+import { ThemeContext } from "@/context/ThemeContext";
 
 const FeaturedInfo = () => {
   const { theme } = useContext(ThemeContext);

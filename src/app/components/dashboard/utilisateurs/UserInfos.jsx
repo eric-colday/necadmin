@@ -1,9 +1,8 @@
 "use client";
 
 import React, { useContext, useEffect, useState } from "react";
-import { ThemeContext } from "../../../../context/ThemeContext";
+import { ThemeContext } from "@/context/ThemeContext";
 import PersonIcon from "@mui/icons-material/Person";
-import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import DeleteIcon from "@mui/icons-material/Delete";
 import PhoneAndroidIcon from "@mui/icons-material/PhoneAndroid";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
@@ -27,7 +26,7 @@ const UserInfos = ({ user }) => {
     if (file) {
       const data = new FormData();
       data.append("file", file);
-      data.append("upload_preset", "upload");
+      data.append("upload_preset", "upload"); 
       try {
         const uploadRes = await axios.post(
           "https://api.cloudinary.com/v1_1/dzer4ijr1/image/upload",

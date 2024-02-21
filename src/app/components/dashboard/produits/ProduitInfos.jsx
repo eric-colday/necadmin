@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useContext, useEffect, useState } from "react";
-import { ThemeContext } from "../../../../context/ThemeContext";
+import { ThemeContext } from "@/context/ThemeContext";
 import PublishIcon from "@mui/icons-material/Publish";
-import { productData } from "../../../../data";
+import { productData } from "@/data";
 import Chart from "./Chart";
 import { useRouter } from "next/navigation";
 import axios from "axios";
@@ -17,22 +17,30 @@ const ProduitInfos = ({ product }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let imageUrl = product.image; // Utilisez l'image actuelle par défaut
+
+    // Initialisez imageUrl comme un tableau vide
+    let imageUrl = [];
 
     // Si un nouveau fichier a été sélectionné, téléchargez-le et mettez à jour l'URL de l'image
-    if (files) {
-      const data = new FormData();
-      data.append("file", files);
-      data.append("upload_preset", "upload");
-      try {
-        const uploadRes = await axios.post(
-          "https://api.cloudinary.com/v1_1/dzer4ijr1/image/upload",
-          data
-        );
-        imageUrl = uploadRes.data.url;
-      } catch (err) {
-        console.log(err);
+    if (files.length > 0) {
+      for (let file of files) {
+        const data = new FormData(); 
+        data.append("file", file);
+        data.append("upload_preset", "upload");
+        try {
+          const uploadRes = await axios.post(
+            "https://api.cloudinary.com/v1_1/dzer4ijr1/image/upload",
+            data
+          );
+          // Ajoutez l'URL de l'image téléchargée au tableau imageUrl
+          imageUrl.push(uploadRes.data.url);
+        } catch (err) {
+          console.log(err);
+        }
       }
+    } else {
+      // Si aucun nouveau fichier n'a été sélectionné, utilisez l'image actuelle
+      imageUrl = product.image;
     }
 
     // Mettez à jour le produit avec la nouvelle URL de l'image (ou l'ancienne si aucune nouvelle image n'a été téléchargée)
@@ -66,7 +74,18 @@ const ProduitInfos = ({ product }) => {
   );
 
   const handleChange = (e) => {
-    setUpdate((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+    if (e.target.id === "size" || e.target.id === "color") {
+      setUpdate((prev) => ({
+        ...prev,
+        [e.target.id]: e.target.value.split(","),
+      }));
+    } else {
+      setUpdate((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+    }
+  };
+
+  const handleFileChange = (e) => {
+    setFiles([...e.target.files]);
   };
 
   return (
@@ -148,7 +167,7 @@ const ProduitInfos = ({ product }) => {
                   defaultValue={product.title}
                   onChange={handleChange}
                   required
-                  className="w-full border outline-none border-gray-300 text-sky-950 rounded-xl p-1 mt-2"
+                  className="w-full border outline-none border-gray-300 text-sky-950 rounded-xl px-4 py-2 mt-2"
                 />
               </div>
               <div className="mt-2">
@@ -157,13 +176,13 @@ const ProduitInfos = ({ product }) => {
                 </label>
                 <textarea
                   type="text"
-                  id="fullname"
-                  name="fullname"
+                  id="description"
+                  name="description"
                   placeholder={product.description}
                   defaultValue={product.description}
                   onChange={handleChange}
                   required
-                  className="w-full border outline-none border-gray-300 text-sky-950 rounded-xl p-1 mt-2"
+                  className="w-full border outline-none border-gray-300 text-sky-950 rounded-xl p-2 mt-2"
                 />
               </div>
               <div className="mt-2">
@@ -178,7 +197,7 @@ const ProduitInfos = ({ product }) => {
                   defaultValue={product.price}
                   onChange={handleChange}
                   required
-                  className="w-full border outline-none border-gray-300 text-sky-950 rounded-xl p-1 mt-2"
+                  className="w-full border outline-none border-gray-300 text-sky-950 rounded-xl px-4 py-2 mt-2"
                 />
               </div>
               <div className="mt-2">
@@ -193,7 +212,7 @@ const ProduitInfos = ({ product }) => {
                   defaultValue={product.slug}
                   onChange={handleChange}
                   required
-                  className="w-full border outline-none border-gray-300 text-sky-950 rounded-xl p-1 mt-2"
+                  className="w-full border outline-none border-gray-300 text-sky-950 rounded-xl px-4 py-2 mt-2"
                 />
               </div>
               <div className="mt-2">
@@ -208,7 +227,7 @@ const ProduitInfos = ({ product }) => {
                   defaultValue={product.catSlug}
                   onChange={handleChange}
                   required
-                  className="w-full border outline-none border-gray-300 text-sky-950 rounded-xl p-1 mt-2"
+                  className="w-full border outline-none border-gray-300 text-sky-950 rounded-xl px-4 py-2 mt-2"
                 />
               </div>
               <div className="mt-2">
@@ -223,7 +242,7 @@ const ProduitInfos = ({ product }) => {
                   defaultValue={product.cat}
                   onChange={handleChange}
                   required
-                  className="w-full border outline-none border-gray-300 text-sky-950 rounded-xl p-1 mt-2"
+                  className="w-full border outline-none border-gray-300 text-sky-950 rounded-xl px-4 py-2 mt-2"
                 />
               </div>
               <div className="mt-2">
@@ -238,7 +257,22 @@ const ProduitInfos = ({ product }) => {
                   defaultValue={product.size}
                   onChange={handleChange}
                   required
-                  className="w-full border outline-none border-gray-300 text-sky-950 rounded-xl p-1 mt-2"
+                  className="w-full border outline-none border-gray-300 text-sky-950 rounded-xl px-4 py-2 mt-2"
+                />
+              </div>
+              <div className="mt-2">
+                <label htmlFor="" className="text-sm">
+                  Couleur
+                </label>
+                <input
+                  type="text"
+                  id="color"
+                  name="color"
+                  placeholder={product.color}
+                  defaultValue={product.color}
+                  onChange={handleChange}
+                  required
+                  className="w-full border outline-none border-gray-300 text-sky-950 rounded-xl px-4 py-2 mt-2"
                 />
               </div>
               <div className="mt-2">
@@ -249,7 +283,7 @@ const ProduitInfos = ({ product }) => {
                   name="active"
                   id="active"
                   onChange={handleChange}
-                  className="w-full border outline-none border-gray-300 text-sky-950 rounded-xl p-1 mt-2"
+                  className="w-full border outline-none border-gray-300 text-sky-950 rounded-xl px-4 py-2 mt-2"
                 >
                   <option value="true">Oui</option>
                   <option value="false">Non</option>
@@ -258,8 +292,8 @@ const ProduitInfos = ({ product }) => {
               <div className="flex items-center gap-5 max-[504px]:flex-col mt-4">
                 <img
                   src={
-                    files
-                      ? URL.createObjectURL(files)
+                    files.length > 0
+                      ? URL.createObjectURL(files[0])
                       : product.image[0] ||
                         "https://res.cloudinary.com/dzer4ijr1/image/upload/v1703108635/users/noavatar_xckjxl.png"
                   }
@@ -275,7 +309,7 @@ const ProduitInfos = ({ product }) => {
                   name="file"
                   accept=".png,.jpeg,.jpg,.webp"
                   multiple
-                  onChange={(e) => setFiles(e.target.files[0])}
+                  onChange={handleFileChange}
                   className="max-[504px]: max-[504px]:text-xs max-[504px]:w-full"
                 />
               </div>

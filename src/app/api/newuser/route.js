@@ -1,7 +1,7 @@
 "use server";
 
-import connect from "../../lib/utils";
-import User from "../../../models/User";
+import connect from "@/app/lib/utils";
+import User from "@/models/User";
 import bcrypt from "bcrypt";
 import { NextResponse } from "next/server";
 

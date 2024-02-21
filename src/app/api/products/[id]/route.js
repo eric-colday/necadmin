@@ -6,14 +6,14 @@ export const GET = async (request, { params }) => {
   const { id } = params;
   try {
     await connect();
-    // FIND USER BY ID
+    // FIND PRODUCT BY ID
     const product = await Product.findById(id);
     return new NextResponse(JSON.stringify(product), { status: 200 });
   } catch (error) {
     console.log(error);
     return new NextResponse("Database Error", { status: 500 });
   }
-};
+}; 
 
 export const PUT = async (request, { params }) => {
   const { id } = params;
@@ -28,11 +28,11 @@ export const PUT = async (request, { params }) => {
     size,
     color,
     inStock,
-  } = await request.json();
+  } = await request.json(); 
   try {
     await connect();
     // FIND USER BY ID AND UPDATE
-    await Product.findByIdAndUpdate(
+    await Product.findByIdAndUpdate( 
       id,
       {
         title,
@@ -63,10 +63,10 @@ export const DELETE = async (request, { params }) => {
   const { id } = params;
   try {
     await connect();
-    // FIND USER BY ID AND DELETE
-    await User.findByIdAndDelete(id);
+    // FIND PRODUCT BY ID AND DELETE
+    await Product.findByIdAndDelete(id);
     return new NextResponse(
-      JSON.stringify({ message: "Utilisateur supprimé" }),
+      JSON.stringify({ message: "Produit supprimé" }),
       {
         status: 201,
       }
