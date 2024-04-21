@@ -22,10 +22,10 @@ const Table = ({ data }) => {
 
   const handleDelete = async (_id) => {
     try {
-      await fetch("/api/categoryproducts/" + _id, {
+      await fetch("/api/products/" + _id, { 
         method: "DELETE",
       });
-      setList(list.filter((product) => product._id !== _id));
+      setList(list.filter((product) => product._id !== _id)); 
       window.location.reload();
       Router.push("/dashboard/products");
     } catch (err) {

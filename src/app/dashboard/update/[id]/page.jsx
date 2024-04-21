@@ -101,7 +101,12 @@ const Article = ({ params }) => {
     };
 
     try {
-      const res = await fetch("http://localhost:3000/api/posts/" + id, {
+      // const res = await fetch("http://localhost:3000/api/posts/" + id, {
+      //   method: "PUT",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify(updatePost),
+      // });
+      const res = await fetch("https://necadmin.vercel.app/api/posts/" + id, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatePost),
@@ -121,7 +126,11 @@ const Article = ({ params }) => {
 
   const handleDelete = async (_id) => {
     try {
-      const res = await fetch("http://localhost:3000/api/posts/" + _id, {
+      // const res = await fetch("http://localhost:3000/api/posts/" + _id, {
+      //   method: "DELETE",
+      // });
+
+      const res = await fetch("https://necadmin.vercel.app/api/posts/" + _id, {
         method: "DELETE",
       });
 
